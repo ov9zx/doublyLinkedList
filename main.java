@@ -2,16 +2,16 @@ class Main {
     public static void main(String[] args) {
         DoublyLinkedList list = new DoublyLinkedList();
 
-   
+
         list.add(21);
         list.add(43);
         list.add(23);
         list.add(1);
         list.add(5);
         list.add(120);
-        
+
         list.display();
-        
+
         System.out.println("\nПоиск элементов:");
         list.find(1);
         list.find(22);
@@ -23,7 +23,7 @@ class Main {
         System.out.println("\nДобавление в начало:");
         list.addFirst(100);
         list.display();
-   
+
     }
 }
 
@@ -156,14 +156,13 @@ class DoublyLinkedList {
 }
 
 
-    
-
-
-   
 
 
 
 
 
 
-}
+
+
+
+
