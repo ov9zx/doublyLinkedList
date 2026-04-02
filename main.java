@@ -1,36 +1,24 @@
-class Main {
+class main {
     public static void main(String[] args) {
-        DoublyLinkedList list = new DoublyLinkedList();
-
-
-        list.add(21);
-        list.add(43);
-        list.add(23);
-        list.add(1);
-        list.add(5);
-        list.add(120);
-
-        list.display();
-
-        System.out.println("\nПоиск элементов:");
-        list.find(1);
-        list.find(22);
-        System.out.println("\nУдаление элементов:");
-        list.delete(21);
-        list.delete(25);
-        System.out.println("\nСписок после удаления:");
-        list.display();
-        System.out.println("\nДобавление в начало:");
-        list.addFirst(100);
-        list.display();
-
+        linkedList linkedList1 = new linkedList();
+        linkedList1.addFirst(21);
+        linkedList1.addEnd(43);
+        linkedList1.addAfterElement(24,25);
+        linkedList1.addFirst(1);
+        linkedList1.addFirst(5);
+        linkedList1.addFirst(120);
+        linkedList1.display();
+        linkedList1.find(1);
+        linkedList1.find(22);
+        linkedList1.delete(21);
+        linkedList1.delete(25);
+        linkedList1.display();
     }
 }
 
-class DoublyLinkedList {
+class linkedList {
     Node head;
     Node tail;
-    int count;
 
     static class Node {
         int data;
@@ -44,21 +32,6 @@ class DoublyLinkedList {
         }
     }
 
-
-    public void add(int value) {
-        Node newNode = new Node(value);
-        if (head == null) {
-            head = newNode;
-            tail = newNode;
-        } else {
-            tail.next = newNode;
-            newNode.prev = tail;
-            tail = newNode;
-        }
-        count++;
-    }
-
-
     public void addFirst(int value) {
         Node newNode = new Node(value);
         if (head == null) {
@@ -69,50 +42,67 @@ class DoublyLinkedList {
             head.prev = newNode;
             head = newNode;
         }
-        count++;
     }
 
-
-    public void display() {
+    public void addEnd(int value) {
+        Node newNode = new Node(value);
         if (head == null) {
-            System.out.println("Список пуст");
+            head = newNode;
+            tail = newNode;
+        } else {
+            tail.next = newNode;
+            newNode.prev = tail;
+            tail = newNode;
+        }
+    }
+
+    public void addAfterElement(int value, int element) {
+        Node current = find(element);
+        if (current == null) {
+            System.out.println("Элемент " + element + " не найден, вставка невозможна");
             return;
         }
 
-        Node current = head;
-        while (current != null) {
-            System.out.print(current.data);
-            if (current.next != null) {
-                System.out.print(" <-> ");
-            }
-            current = current.next;
+        Node newNode = new Node(value);
+        newNode.next = current.next;
+        newNode.prev = current;
+
+        if (current.next != null) {
+            current.next.prev = newNode;
+        } else {
+            // Если вставляем после последнего элемента, обновляем tail
+            tail = newNode;
         }
-        System.out.println();
+        current.next = newNode;
+
+        System.out.println("Элемент " + value + " вставлен после элемента " + element);
     }
 
+    public void display() {
+        Node current = head;
+        while (current != null) {
+            System.out.println(current.data);
+            current = current.next;
+        }
+    }
 
     public Node find(int value) {
         Node current = head;
-        int position = 0;
-
         while (current != null) {
             if (current.data == value) {
-                System.out.println("Элемент " + value + " найден на позиции " + position);
+                System.out.println("Элемент " + value + " найден)");
                 return current;
             }
             current = current.next;
-            position++;
         }
-        System.out.println("Элемент " + value + " не найден");
+        System.out.println("Элемент " + value + " не найден(((");
         return null;
     }
 
     public void delete(int value) {
-        if (head == null) {
-            System.out.println("Список пуст");
-            return;
-        }
+        if (head == null) return;
 
+        // 1. Удаляем голову
         if (head.data == value) {
             head = head.next;
             if (head != null) {
@@ -120,49 +110,33 @@ class DoublyLinkedList {
             } else {
                 tail = null;
             }
-            count--;
             System.out.println("Элемент " + value + " удален!");
             return;
         }
 
-
+        // 2. Удаляем хвост
         if (tail.data == value) {
             tail = tail.prev;
             if (tail != null) {
                 tail.next = null;
             }
-            count--;
             System.out.println("Элемент " + value + " удален!");
             return;
         }
 
-
+        // 3. Ищем и удаляем в середине
         Node current = head;
         while (current != null) {
             if (current.data == value) {
                 current.prev.next = current.next;
                 current.next.prev = current.prev;
-                count--;
                 System.out.println("Элемент " + value + " удален!");
                 return;
             }
             current = current.next;
         }
 
-        System.out.println("Элемент " + value + " для удаления не найден");
+        // 4. Элемент не найден
+        System.out.println("Элемент " + value + " для удаления не найден((");
     }
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
